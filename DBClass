@@ -1,0 +1,91 @@
+package ProjectName;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class DBClass {
+
+
+	// Database connection
+
+	public Connection openCon() throws Exception {
+		// step1 load the driver class
+		Class.forName("oracle.jdbc.driver.OracleDriver");
+
+		// step2 create the connection object
+		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@HostName:1521:DBName", "DBUserName",
+				"UserPassword");
+		return connection;
+	}
+
+	
+	// Return data from DB using SQL statement
+	public String getClients() {
+
+
+		String clientName="";
+    try {
+
+			Connection con = openCon();
+
+			// step3 create the statement object
+			Statement stmt = con.createStatement();
+
+			// step4 execute query
+			ResultSet rs = stmt.executeQuery("SELECT CLIENT_NAME FROM CLIENTS WHERE CREATION_DATE>'01-JAN-2020'");
+
+			while (rs.next())
+				clientName = rs.getString(1);
+			
+
+			// step5 close the connection object
+			con.close();
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return clientName;
+
+	}
+
+
+//Get data from Stored procedure
+public float getClientCredit(String clientName) {
+	float clientCredit=0;
+  try {
+
+			Connection con = openCon();
+      //define call statement for procedure with 10 parameter parameters [3 input parameter + 7 Outpur parameters]
+      //get client credit given client Name
+			CallableStatement cstmt = con.prepareCall("{CALL project_package.procedure_Name(?,?,?,?,?,?,?,?,?,?)}");
+			cstmt.setNull(1, Types.FLOAT);
+			cstmt.setString(2, clientName);
+			cstmt.setNull(3, Types.FLOAT);
+			cstmt.registerOutParameter(4, Types.FLOAT);
+			cstmt.registerOutParameter(5, Types.FLOAT);
+			cstmt.registerOutParameter(6, Types.FLOAT);
+			cstmt.registerOutParameter(7, Types.FLOAT);
+			cstmt.registerOutParameter(8, Types.FLOAT);
+			cstmt.registerOutParameter(9, Types.VARCHAR);
+			cstmt.registerOutParameter(10, Types.VARCHAR);
+
+			cstmt.executeUpdate();
+
+			clientCredit = cstmt.getFloat(5);
+			
+			cstmt.close();
+			con.close();
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		return clientCredit;
+	}
+	
+
+
+}
