@@ -7,7 +7,7 @@ import org.openqa.selenium.winium.WiniumDriver;
 import winium.elements.desktop.DesktopElement;
 
 // Extends Base class that contains driver setup
-public class LoginScreen extends Base {
+public class PageObject extends Base {
 	
 	WiniumDriver driver;
 	
