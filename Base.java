@@ -21,14 +21,18 @@ public class Base {
 	protected WiniumDriver driver=null;
 	protected WiniumDriverService service = null;
 	
+	File f=new File("src\\Resources");
+	File driverPath=new File(f,"Winium.Desktop.Driver.exe");
+	File glbPath=new File(f,"global.properties")
+	
   //Define Application undertest path variable
 	String appPath="C:\\Program Files (x86)\\ApplicationNameApplication.exe";
   
 	//Define properties file path variable
-	String filePath="C:\\Work\\AutomationProjects\\ProjectName\\src\\Resources\\global.properties";
+	String filePath=filePath.getAbsolutePath();
 	
   //Define winium driver path variable 
-	String driverPath="C:\\Work\\AutomationProjects\\ProjectName\\src\\Resources\\Winium.Desktop.Driver.exe";
+	String driverPath=driverPath.getAbsolutePath();
 	
 	Properties p=new Properties();
 	 
